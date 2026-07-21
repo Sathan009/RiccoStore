@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLACK GREEN STORE</title>
+    <style>
+        /* ========== RESET & BASE ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #060b06;
+            color: #c0e0c0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* ========== SCROLLBAR ========== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a120a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1d6b1d;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #000000;
+        }
+
+        /* ========== CONTAINER ========== */
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* ========== HEADER ========== */
+        .header {
+            background: #000000;
+            border: 2px solid #0653b8;
+            border-radius: 25px;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            color: #dbe2db;
+            text-shadow: 0 0 20px #000000;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: #7aaa7a;
+            font-size: 14px;
+            font-weight: 300;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #0a120a;
+            border: 1px solid #1d5e1d;
+            border-radius: 50px;
+            padding: 5px 15px;
+            transition: 0.3s;
+        }
+
+        .search-box:focus-within {
+            border-color: #33ff33;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            padding: 10px 8px;
+            color: #b0ffb0;
+            font-size: 14px;
+            width: 180px;
+            outline: none;
+        }
+
+        .search-box input::placeholder {
+            color: #3a5a3a;
+        }
+
+        .search-box button {
+            background: transparent;
+            border: none;
+            color: #33ff33;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px 8px;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 28px;
+            color: #33ff33;
+            transition: 0.3s;
+            background: #0a120a;
+            padding: 8px 15px;
+            border-radius: 50px;
+            border: 1px solid #1d5e1d;
+        }
+
+        .cart-icon:hover {
+            border-color: #33ff33;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.15);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #33ff33;
+            color: #060b06;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ========== CATEGORY FILTERS ========== */
+        .categories {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            padding: 5px 0;
+        }
+
+        .cat-btn {
+            background: transparent;
+            border: 2px solid #1d4a1d;
+            color: #7aaa7a;
+            padding: 10px 28px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cat-btn:hover {
+            border-color: #33ff33;
+            color: #33ff33;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.05);
+        }
+
+        .cat-btn.active {
+            background: #33ff33;
+            color: #060b06;
+            border-color: #33ff33;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);
+        }
+
+        /* ========== PRODUCT GRID ========== */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        /* ========== PRODUCT CARD ========== */
+        .product-card {
+            background: #0f1a0f;
+            border: 2px solid #1a3a1a;
+            border-radius: 20px;
+            padding: 20px;
+            transition: 0.35s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(0, 255, 0, 0.03), transparent 70%);
+            opacity: 0;
+            transition: 0.5s;
+            pointer-events: none;
+        }
+
+        .product-card:hover::before {
+            opacity: 1;
+        }
+
+        .product-card:hover {
+            border-color: #2a8a2a;
+            transform: translateY(-6px);
+            box-shadow: 0 15px 40px rgba(0, 255, 0, 0.08);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #33ff33;
+            color: #060b06;
+            padding: 4px 14px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .product-badge.sale {
+            background: #ff4444;
+            color: #fff;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 14px;
+            border: 1px solid #1a3a1a;
+            background: #0a120a;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+        .product-img:hover {
+            border-color: #33aa33;
+        }
+
+        .product-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #d0f0d0;
+            margin-bottom: 4px;
+        }
+
+        .product-category {
+            font-size: 12px;
+            color: #4a7a4a;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .product-desc {
+            font-size: 14px;
+            color: #8aaa8a;
+            margin-bottom: 12px;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        .product-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .product-price {
+            font-size: 24px;
+            font-weight: 800;
+            color: #33ff33;
+            text-shadow: 0 0 20px rgba(0, 255, 0, 0.15);
+        }
+
+        .product-price .old-price {
+            font-size: 16px;
+            color: #4a5a4a;
+            text-decoration: line-through;
+            margin-right: 8px;
+            font-weight: 400;
+        }
+
+        .buy-btn-sm {
+            background: transparent;
+            border: 2px solid #33ff33;
+            color: #33ff33;
+            padding: 8px 22px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .buy-btn-sm:hover {
+            background: #33ff33;
+            color: #060b06;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);
+            transform: scale(1.05);
+        }
+
+        .buy-btn-sm:active {
+            transform: scale(0.95);
+        }
+
+        .buy-btn-sm.bought {
+            background: #1a3a1a;
+            border-color: #1a5a1a;
+            color: #4a7a4a;
+            cursor: default;
+        }
+
+        /* ========== DISCORD TICKET LOADER (Popup) ========== */
+        .ticket-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .ticket-overlay.show {
+            display: flex;
+        }
+
+        .ticket-popup {
+            background: #0f1a0f;
+            border: 2px solid #33ff33;
+            border-radius: 30px;
+            padding: 40px 45px;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 0 80px rgba(0, 255, 0, 0.15);
+            animation: slideUp 0.4s ease;
+        }
+
+        .ticket-popup .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #1a3a1a;
+            border-top: 6px solid #33ff33;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .ticket-popup h2 {
+            color: #33ff33;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .ticket-popup p {
+            color: #8aaa8a;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .ticket-popup .discord-link {
+            display: inline-block;
+            margin-top: 15px;
+            background: #e78608;
+            color: #060b06;
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 16px;
+        }
+
+        .ticket-popup .discord-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(0, 255, 0, 0.3);
+        }
+
+        .ticket-popup .close-popup {
+            margin-top: 18px;
+            background: transparent;
+            border: 1px solid #1a4a1a;
+            color: #4a7a4a;
+            padding: 8px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .ticket-popup .close-popup:hover {
+            border-color: #33ff33;
+            color: #33ff33;
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            background: #0f1a0f;
+            border: 1px solid #1a3a1a;
+            border-radius: 20px;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .footer p {
+            color: #3a5a3a;
+            font-size: 14px;
+        }
+
+        .footer p span {
+            color: #55aa55;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: #4a7a4a;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #33ff33;
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 18px;
+            }
+
+            .header-right {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+
+            .cart-icon {
+                text-align: center;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 18px;
+            }
+
+            .ticket-popup {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ========== TOAST NOTIFICATION ========== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #0f1a0f;
+            border: 2px solid #00b3fa;
+            color: #82C8E5;
+            padding: 15px 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            transform: translateY(120px);
+            opacity: 0;
+            transition: 0.5s ease;
+            z-index: 1000;
+            font-weight: 600;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ===== HEADER ===== -->
+        <header class="header">
+            <div class="logo">
+                <h1>⬡ Ricco Projects</h1>
+                <span>| premium store</span>
+            </div>
+            <div class="header-right">
+                <div class="search-box">
+                    <input type="text" placeholder="Search items..." id="searchInput">
+                    <button onclick="filterProducts()">🔍</button>
+                </div>
+                <div class="cart-icon" onclick="showCartToast()">
+                    🛒
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- ===== CATEGORIES ===== -->
+        <div class="categories" id="categoryFilters">
+            <button class="cat-btn active" data-cat="all">📦 All</button>
+            <button class="cat-btn" data-cat="gaming">🎮 MTA sa Resouce</button>
+            <button class="cat-btn" data-cat="tech">🎮 Five m </button>
+            <button class="cat-btn" data-cat="fashion">🛠 Discord Dev</button>
+            <button class="cat-btn" data-cat="accessories">🎮 GTA SA-SAMP</button>
+        </div>
+
+        <!-- ===== PRODUCTS GRID ===== -->
+        <div class="products-grid" id="productsGrid"></div>
+
+        <!-- ===== FOOTER ===== -->
+        <footer class="footer">
+            <p>© 2026 <span>Ricco Project Store</span> • all rights reserved</p>
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+                <a href="#">Discord</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ===== DISCORD TICKET OVERLAY ===== -->
+    <div class="ticket-overlay" id="ticketOverlay">
+        <div class="ticket-popup">
+            <div class="loader-spinner"></div>
+            <h2>🎫 Creating Ticket...</h2>
+            <p>Redirecting to Discord Ticket Channel</p>
+            <p style="font-size:13px; color:#3a6a3a;" id="ticketItemName">Item: Loading...</p>
+            <a href="#" class="discord-link" id="discordLink" target="_blank">Open Discord Ticket</a>
+            <br>
+            <button class="close-popup" onclick="closeTicketPopup()">✕ Close</button>
+        </div>
+    </div>
+
+    <!-- ===== TOAST ===== -->
+    <div class="toast" id="toast">✅ Added to cart!</div>
+
+
+    <script>
+        // ============================================================
+        //  PRODUCT DATA
+        // ============================================================
+        const products = [{
+            id: 1,
+            name: 'COUSTOM VINEWOOD SING FOR MTA SA',
+            category: 'gaming',
+            price: 2.30,
+            oldPrice: 3.00,
+            desc: 'Optimaze and Low Mb Best VineWood Coustom Bord MTA sa',
+            image: 'https://i.ibb.co/ycfLd3QF/Chat-GPT-Image-Jul-17-2026-04-59-55-PM.png',
+            badge: 'sale'
+        }, {
+            id: 2,
+            name: 'MTA SA OWL Gaming MOD Based CV System = Vehicle Recovery System',
+            category: 'gaming',
+            price: 5.00,
+            oldPrice: null,
+            desc: 'Optimzie and Easy Setp and low mb',
+            image: 'https://i.ibb.co/WpfnM1G4/CV.png',
+            badge: 'new'
+        }, {
+            id: 3,
+            name: 'Wireless Headset',
+            category: 'gaming',
+            price: 129.99,
+            oldPrice: 159.99,
+            desc: '7.1 surround sound, 20hr battery, noise-cancelling mic',
+            image: 'https://via.placeholder.com/300x200/0f1a0f/33ff33?text=Headset',
+            badge: 'sale'
+        }, {
+            id: 4,
+            name: 'Gaming Monitor 27"',
+            category: 'tech',
+            price: 299.99,
+            oldPrice: null,
+            desc: '144Hz, 1ms, 2560x1440, IPS panel',
+            image: 'https://via.placeholder.com/300x200/0f1a0f/33ff33?text=Monitor',
+            badge: null
+        }, {
+            id: 5,
+            name: 'USB-C Hub',
+            category: 'tech',
+            price: 39.99,
+            oldPrice: 59.99,
+            desc: '7-in-1, 4K HDMI, SD card reader, 100W PD',
+            image: 'https://via.placeholder.com/300x200/0f1a0f/33ff33?text=USB+Hub',
+            badge: 'sale'
+        }, {
+            id: 6,
+            name: 'Premium T-Shirt',
+            category: 'fashion',
+            price: 24.99,
+            oldPrice: null,
+            desc: '100% cotton, Black/Green design, limited edition',
+            image: 'https://via.placeholder.com/300x200/0f1a0f/33ff33?text=T-Shirt',
+            badge: 'new'
+        }, {
+            id: 7,
+            name: 'Hoodie',
+            category: 'fashion',
+            price: 54.99,
+            oldPrice: 74.99,
+            desc: 'Oversized fit, embroidered logo, premium quality',
+            image: 'https://via.placeholder.com/300x200/0f1a0f/33ff33?text=Hoodie',
+            badge: 'sale'
+        }, {
+            id: 8,
+            name: 'Smart Watch',
+            category: 'accessories',
+            price: 199.99,
+            oldPrice: null,
+            desc: 'AMOLED display, heart rate monitor, GPS, 5ATM',
+            image: 'https://via.placeholder.com/300x200/0f1a0f/33ff33?text=Smart+Watch',
+            badge: 'new'
+        }, {
+            id: 9,
+            name: 'Phone Case',
+            category: 'accessories',
+            price: 14.99,
+            oldPrice: 19.99,
+            desc: 'Shockproof, slim design, Black/Green edition',
+            image: 'https://via.placeholder.com/300x200/0f1a0f/33ff33?text=Phone+Case',
+            badge: 'sale'
+        }, {
+            id: 10,
+            name: 'LED Strip Lights',
+            category: 'tech',
+            price: 29.99,
+            oldPrice: null,
+            desc: '5m, RGBIC, app controlled, music sync',
+            image: 'https://via.placeholder.com/300x200/0f1a0f/33ff33?text=LED+Strip',
+            badge: null
+        }, {
+            id: 11,
+            name: 'Gaming Chair',
+            category: 'gaming',
+            price: 249.99,
+            oldPrice: 329.99,
+            desc: 'Ergonomic, PU leather, adjustable armrests',
+            image: 'https://via.placeholder.com/300x200/0f1a0f/33ff33?text=Gaming+Chair',
+            badge: 'sale'
+        }, {
+            id: 12,
+            name: 'Sneakers',
+            category: 'fashion',
+            price: 89.99,
+            oldPrice: null,
+            desc: 'Black/Green colorway, comfortable, limited stock',
+            image: 'https://via.placeholder.com/300x200/0f1a0f/33ff33?text=Sneakers',
+            badge: 'new'
+        }];
+
+        // ============================================================
+        //  STATE
+        // ============================================================
+        let cartCount = 0;
+        let currentCategory = 'all';
+
+        // Discord Ticket URL (ඔබගේ එක දාන්න)
+        const DISCORD_TICKET_URL = 'https://discord.com/channels/1438757039164620832/1438873016388812881/1447533387349753978';
+
+        // ============================================================
+        //  RENDER PRODUCTS
+        // ============================================================
+        function renderProducts(category = 'all', searchTerm = '') {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+
+            let filtered = products;
+
+            // Category filter
+            if (category !== 'all') {
+                filtered = filtered.filter(p => p.category === category);
+            }
+
+            // Search filter
+            if (searchTerm.trim() !== '') {
+                const term = searchTerm.toLowerCase().trim();
+                filtered = filtered.filter(p =>
+                    p.name.toLowerCase().includes(term) ||
+                    p.desc.toLowerCase().includes(term) ||
+                    p.category.includes(term)
+                );
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column:1/-1; text-align:center; padding:60px 20px; color:#4a7a4a; font-size:18px;">
+                        🔍 No items found<br>
+                        <span style="font-size:14px; color:#2a5a2a;">Try a different search or category</span>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.dataset.category = product.category;
+
+                const badgeHTML = product.badge ?
+                    `<span class="product-badge ${product.badge === 'sale' ? 'sale' : ''}">${product.badge}</span>` :
+                    '';
+
+                const oldPriceHTML = product.oldPrice ?
+                    `<span class="old-price">$${product.oldPrice.toFixed(2)}</span>` :
+                    '';
+
+                card.innerHTML = `
+                    ${badgeHTML}
+                    <img class="product-img" src="${product.image}" alt="${product.name}" loading="lazy">
+                    <div class="product-title">${product.name}</div>
+                    <div class="product-category">${product.category}</div>
+                    <div class="product-desc">${product.desc}</div>
+                    <div class="product-bottom">
+                        <div class="product-price">
+                            ${oldPriceHTML}
+                            $${product.price.toFixed(2)}
+                        </div>
+                        <button class="buy-btn-sm" data-id="${product.id}">Buy Now</button>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+
+                // Add event listener to buy button
+                const buyBtn = card.querySelector('.buy-btn-sm');
+                buyBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    handleBuy(product);
+                });
+            });
+        }
+
+        // ============================================================
+        //  HANDLE BUY (Discord Ticket Loader)
+        // ============================================================
+        function handleBuy(product) {
+            // Update cart count
+            cartCount++;
+            document.getElementById('cartCount').textContent = cartCount;
+
+            // Show toast
+            showToast(`🛒 ${product.name} added!`);
+
+            // Show Discord Ticket Popup
+            const overlay = document.getElementById('ticketOverlay');
+            const itemName = document.getElementById('ticketItemName');
+            const discordLink = document.getElementById('discordLink');
+
+            itemName.textContent = `Item: ${product.name} • $${product.price.toFixed(2)}`;
+            discordLink.href = DISCORD_TICKET_URL;
+
+            overlay.classList.add('show');
+
+            // Auto redirect after 2.5s
+            setTimeout(() => {
+                window.open(DISCORD_TICKET_URL, '_blank');
+            }, 2500);
+        }
+
+        // ============================================================
+        //  CLOSE TICKET POPUP
+        // ============================================================
+        function closeTicketPopup() {
+            document.getElementById('ticketOverlay').classList.remove('show');
+        }
+
+        // Close on overlay click (background)
+        document.getElementById('ticketOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeTicketPopup();
+            }
+        });
+
+        // ============================================================
+        //  TOAST
+        // ============================================================
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+
+        function showCartToast() {
+            if (cartCount === 0) {
+                showToast('🛒 Cart is empty');
+            } else {
+                showToast(`🛒 ${cartCount} item${cartCount > 1 ? 's' : ''} in cart`);
+            }
+        }
+
+        // ============================================================
+        //  CATEGORY FILTERS
+        // ============================================================
+        document.querySelectorAll('.cat-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentCategory = this.dataset.cat;
+                const searchVal = document.getElementById('searchInput').value;
+                renderProducts(currentCategory, searchVal);
+            });
+        });
+
+        // ============================================================
+        //  SEARCH
+        // ============================================================
+        function filterProducts() {
+            const searchVal = document.getElementById('searchInput').value;
+            renderProducts(currentCategory, searchVal);
+        }
+
+        document.getElementById('searchInput').addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                filterProducts();
+            }
+            // Live search on typing (optional)
+            // filterProducts(); // uncomment for live search
+        });
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        renderProducts('all', '');
+
+        // ============================================================
+        //  KEYBOARD SHORTCUT: ESC to close popup
+        // ============================================================
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeTicketPopup();
+            }
+        });
+    </script>
+
+</body>
+</html>
